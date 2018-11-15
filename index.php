@@ -1,17 +1,11 @@
+<!DOCTYPE html>
 <html>
 <head>
-
-<header>
- <h2>Friend book</h2>
-</header>
-
-
-
-<style>
-
+	<title>Friend book</title>
+	<style>
 /* Style the header */
 header {
- background-color: #666;
+ background-color: #A52A2A;
  padding: 30px;
  text-align: center;
  font-size: 35px;
@@ -19,64 +13,64 @@ header {
 }
 /* Style the footer */
 footer {
- background-color: #777;
+ background-color: #b62f2f;
  padding: 10px;
  text-align: center;
  color: white;
 }
+p{
+	font-size: 35px;
+
+}
+li{
+	width: 10;
+}
 </style>
 </head>
 
-
+</head>
 <body>
+<header>
+ <h2>Friend book</h2>
+</header>
+<br>
+	<form method="post" action="index.php" >
+	 Name:<input type="text" name="name">
+	<input type="submit">
+	</form>
+<br>
 
-<form action="index.php" method="post">
-<br>Name: <input type="text" name="name">
-<input type="submit">
-</form>
-
+<p><b>My Best Friends :</b></p>
 <?php
-echo "<h1>My best friends: </h1>";
-    
-echo "<ul>";
+	$filename = 'bf.txt';
+	if(isset($_POST['name'])) {
+		$file = fopen( $filename, "a" );
+		fwrite( $file, $_POST['name']);
+		fwrite( $file, "\n");
+	}
 
-$filename = 'newfile.txt';
-
-$file = fopen( $filename, "r" );
-    
-if( $file != false ) {
-    
-    while(!feof($file)){
-        
-        $friend = fgets($file);
-        if(strlen($friend) > 0) {
-            echo "<li>$friend</li>";
-        }
-    }
-}
-fclose( $file );
-    
-if (isset($_POST['name']) && strlen($_POST['name']) > 0) {
-    $name = $_POST['name'];
-    $file = fopen( $filename, "a" );
-    if($file != false){
-         echo "<b><li>$name</li></b>"; 
-         fwrite( $file, $name . "\n" );
-         fclose( $file );
-    }
-
-}
-echo "</ul>";
-if (isset($_POST['delete'])) {
-    $indexToBeRemoved = $_POST['delete'];
-    unset($friendsArray[$indexToBeRemoved]);
-    $friendsArray = array_values($friendsArray);
-}
+	$file = fopen( $filename, "r" );
+	while (!feof($file)) {
+	    $ligne=fgets($file);
+	    if(isset($_POST['filter']) and $_POST['filter']!=''){
+	    	$ligne=strstr($ligne, $_POST['filter'],true).strstr($ligne, $_POST['filter']);
+	    	if($ligne)echo "<ul><li>$ligne</ul></li><br>";
+	    }
+	    else{
+	    	if($ligne)echo "<ul><li>$ligne</ul></li><br>";
+	    }
+	    
+	}
+	
 ?>
-
-</body>
-
+<br>
+	<form method="post" action="index.php" >
+	<input type="text" name="filter">
+	<input type="submit" value="Filter list">
+	</form>
+<br>
 <footer>
- <p>Footer</p>
+ <h2>footer</h2>
 </footer>
+</body>
 </html>
